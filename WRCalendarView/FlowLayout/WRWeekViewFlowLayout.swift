@@ -87,9 +87,9 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     func initialize() {
-        hourHeight = 50
+        hourHeight = 40
         rowHeaderWidth = 50
-        columnHeaderHeight = 50
+        columnHeaderHeight = 40
         hourGridDivisionValue = .minutes_20
         
         initializeMinuteTick()

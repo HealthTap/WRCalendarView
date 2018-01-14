@@ -34,14 +34,9 @@ public class WRWeekView: UIView {
     var eventBySection = [String: [WREvent]]()
     
     public weak var delegate: WRWeekViewDelegate?
-    
-    public var calendarType: CalendarType = .week {
-        didSet {
-            isFirst = true
-            updateView()
-        }
-    }
-    
+
+    public var calendarType: CalendarType = .day
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -51,7 +46,12 @@ public class WRWeekView: UIView {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
+    convenience init(calendarType: CalendarType) {
+        self.init()
+        self.calendarType = calendarType
+    }
+
     func setup() {
         dateFormatter.dateFormat = "yyyyMMdd"
         dateFormatter.timeZone = TimeZone.current
@@ -138,7 +138,12 @@ public class WRWeekView: UIView {
         calendarDate = date
         updateView(animated)
     }
-    
+
+    public func setCalendarType(_ calendarType: CalendarType){
+        self.calendarType = calendarType
+        updateView()
+    }
+
     // MARK: - events
     public func setEvents(events: [WREvent]) {
         self.events = events

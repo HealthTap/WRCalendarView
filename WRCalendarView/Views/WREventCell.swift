@@ -9,7 +9,6 @@
 import UIKit
 
 class WREventCell: UICollectionViewCell {
-    @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
 
     override func awakeFromNib() {
@@ -22,24 +21,6 @@ class WREventCell: UICollectionViewCell {
         
         updateColors()
     }
-
-    override var isSelected: Bool {
-        didSet {
-            if isSelected && isSelected != oldValue {
-                UIView.animate(withDuration: TimeInterval(0.2), animations: { [unowned self] in
-                    self.transform = CGAffineTransform.init(scaleX: 1.025, y: 1.025)
-                    self.layer.shadowOpacity = 0.2
-                }, completion: { [unowned self] _ in
-                    self.transform = CGAffineTransform.identity
-                })
-            } else if isSelected {
-                layer.shadowOpacity = 0.2
-            } else {
-                layer.shadowOpacity = 0.0
-            }
-            updateColors()
-        }
-    }
     
     var event: WREvent? {
         didSet {
@@ -50,20 +31,15 @@ class WREventCell: UICollectionViewCell {
     }
     
     func updateColors() {
-        contentView.backgroundColor = backgroundColorHighlighted(isSelected)
-        borderView.backgroundColor = borderColor()
-        titleLabel.textColor = textColorHighlighted(isSelected)
+        contentView.backgroundColor = backgroundColorHighlighted()
+        titleLabel.textColor = textColorHighlighted()
     }
-    
-    func backgroundColorHighlighted(_ selected: Bool) -> UIColor {
-        return selected ? UIColor(hexString: "35b1f1")! : UIColor(hexString: "35b1f1")!.withAlphaComponent(0.1)
+
+    func backgroundColorHighlighted() -> UIColor {
+        return UIColor(hexString: "4cd864")!
     }
-    
-    func textColorHighlighted(_ selected: Bool) -> UIColor {
-        return selected ? UIColor.white : UIColor(hexString: "21729c")!
-    }
-    
-    func borderColor() -> UIColor {
-        return self.backgroundColorHighlighted(false).withAlphaComponent(1.0)
+
+    func textColorHighlighted() -> UIColor {
+        return UIColor.white
     }
 }
