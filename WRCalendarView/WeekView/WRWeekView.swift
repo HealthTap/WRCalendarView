@@ -28,10 +28,11 @@ public class WRWeekView: UIView {
     var loading = false
     var isFirst = true
     var daysToShow: Int = 0
-    var daysToShowOnScreen: Int = 0
-    var calendarDate: Date!
     var events = [WREvent]()
     var eventBySection = [String: [WREvent]]()
+    
+    public var calendarDate: Date!
+    public var daysToShowOnScreen: Int = 0
     
     public weak var delegate: WRWeekViewDelegate?
 
@@ -47,7 +48,7 @@ public class WRWeekView: UIView {
         setup()
     }
 
-    convenience init(calendarType: CalendarType) {
+    public convenience init(calendarType: CalendarType) {
         self.init()
         self.calendarType = calendarType
     }
