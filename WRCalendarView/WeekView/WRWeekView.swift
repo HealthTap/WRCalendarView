@@ -168,6 +168,13 @@ public class WRWeekView: UIView {
         flowLayout.invalidateLayoutCache()
         collectionView.reloadData()
     }
+    
+    public func handleOrientationChange() {
+        flowLayout.invalidateLayoutCache()
+        flowLayout.invalidateLayout()
+        updateView()
+    }
+
 
     // MARK: - private actions
     //  Get date from point
