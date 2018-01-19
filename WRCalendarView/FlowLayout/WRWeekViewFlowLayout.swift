@@ -90,7 +90,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         hourHeight = 40
         rowHeaderWidth = 50
         columnHeaderHeight = 40
-        hourGridDivisionValue = .minutes_20
+        hourGridDivisionValue = .minutes_15
         
         initializeMinuteTick()
     }
