@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F71b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -24,10 +23,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
-                        <rect key="frame" x="4" y="4" width="175" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="13C-qq-HS9"/>
-                        </constraints>
+                        <rect key="frame" x="4" y="4" width="175" height="160"/>
                         <fontDescription key="fontDescription" name="NotoSans-Bold" family="Noto Sans" pointSize="10"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -37,6 +33,7 @@
             <color key="backgroundColor" red="0.29803921568627451" green="0.84705882352941175" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="SvP-El-S0W" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="4" id="b3r-0k-3e2"/>
+                <constraint firstAttribute="bottom" secondItem="SvP-El-S0W" secondAttribute="bottom" constant="4" id="nT6-5J-hEN"/>
                 <constraint firstAttribute="trailing" secondItem="SvP-El-S0W" secondAttribute="trailing" constant="4" id="xU5-u9-h7a"/>
                 <constraint firstItem="SvP-El-S0W" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="zZH-qO-2W1"/>
             </constraints>
