@@ -26,6 +26,12 @@ class WREventCell: UICollectionViewCell {
         didSet {
             if let event = event {
                 titleLabel.text = event.title
+                if let titleColor = event.titleColor {
+                    titleLabel.textColor = titleColor
+                }
+                if let bgColor = event.backgroundColor {
+                    contentView.backgroundColor = bgColor
+                }
             }
         }
     }
