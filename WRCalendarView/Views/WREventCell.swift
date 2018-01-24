@@ -32,6 +32,11 @@ class WREventCell: UICollectionViewCell {
                 if let bgColor = event.backgroundColor {
                     contentView.backgroundColor = bgColor
                 }
+                if let borderColor = event.borderColor {
+                    contentView.layer.borderWidth = 1
+                    contentView.layer.borderColor = borderColor.cgColor
+                }
+
             }
         }
     }
