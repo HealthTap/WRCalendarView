@@ -12,7 +12,9 @@ import DateToolsSwift
 open class WREvent: TimePeriod {
     open var title: String = ""
     open var eventId: String = ""
-    
+    open var titleColor: UIColor?
+    open var backgroundColor: UIColor?
+
     open class func make(date:Date, chunk: TimeChunk, title: String) -> WREvent {
         let event = WREvent(beginning: date, chunk: chunk)
         event.title = title
