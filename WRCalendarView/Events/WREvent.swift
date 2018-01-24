@@ -14,6 +14,7 @@ open class WREvent: TimePeriod {
     open var eventId: String = ""
     open var titleColor: UIColor?
     open var backgroundColor: UIColor?
+    open var borderColor: UIColor?
 
     open class func make(date:Date, chunk: TimeChunk, title: String) -> WREvent {
         let event = WREvent(beginning: date, chunk: chunk)
