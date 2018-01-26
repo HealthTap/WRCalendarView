@@ -28,15 +28,22 @@ class WREventCell: UICollectionViewCell {
                 titleLabel.text = event.title
                 if let titleColor = event.titleColor {
                     titleLabel.textColor = titleColor
+                } else {
+                    titleLabel.textColor = textColorHighlighted()
                 }
+                
                 if let bgColor = event.backgroundColor {
                     contentView.backgroundColor = bgColor
+                } else {
+                    contentView.backgroundColor = backgroundColorHighlighted()
                 }
+                
                 if let borderColor = event.borderColor {
                     contentView.layer.borderWidth = 1
                     contentView.layer.borderColor = borderColor.cgColor
+                } else {
+                    contentView.layer.borderWidth = 0
                 }
-
             }
         }
     }
