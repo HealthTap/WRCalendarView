@@ -44,6 +44,12 @@ class WREventCell: UICollectionViewCell {
                 } else {
                     contentView.layer.borderWidth = 0
                 }
+                
+                if let opacity = event.opacity {
+                    contentView.alpha = opacity
+                } else {
+                    contentView.alpha = 1.0
+                }
             }
         }
     }
