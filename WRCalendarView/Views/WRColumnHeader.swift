@@ -22,11 +22,20 @@ class WRColumnHeader: UICollectionReusableView {
     var date: Date? {
         didSet {
             if let date = date {
+                
                 let weekday = calendar.component(.weekday, from: date) - 1
-                let labelText = dateFormatter.shortWeekdaySymbols[weekday].uppercased() + " " + String(calendar.component(.day, from: date))
-                weekdayLbl.text = labelText
+                
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    let labelText = dateFormatter.shortWeekdaySymbols[weekday].uppercased() + " " + String(calendar.component(.day, from: date))
+                    weekdayLbl.text = labelText
+                } else {
+                    let labelText = dateFormatter.veryShortWeekdaySymbols[weekday].uppercased() + "\n" + String(calendar.component(.day, from: date))
+                    weekdayLbl.numberOfLines = 0
+                    weekdayLbl.text = labelText
+                }
+                
                 weekdayLbl.textColor = UIColor(hexString: "333333")
-
+                
                 if date.isSameDay(date: Date()) {
                     backgroundColor = UIColor(hexString: "f5f8fd")
                 } else {
