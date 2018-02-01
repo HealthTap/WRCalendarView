@@ -19,13 +19,15 @@ class WRColumnHeader: UICollectionReusableView {
 //        dateFormatter.locale = Locale(identifier: "en_US")
     }
     
+    var calendarType: CalendarType = .week
+    
     var date: Date? {
         didSet {
             if let date = date {
                 
                 let weekday = calendar.component(.weekday, from: date) - 1
                 
-                if UIDevice.current.userInterfaceIdiom == .pad {
+                if UIDevice.current.userInterfaceIdiom == .pad || calendarType == .day {
                     let labelText = dateFormatter.shortWeekdaySymbols[weekday].uppercased() + " " + String(calendar.component(.day, from: date))
                     weekdayLbl.text = labelText
                 } else {
