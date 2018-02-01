@@ -358,6 +358,8 @@ extension WRWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
             let columnHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                                withReuseIdentifier: ReuseIdentifiers.columnHeader,
                                                                                for: indexPath) as! WRColumnHeader
+            
+            columnHeader.calendarType = self.calendarType
             columnHeader.date = flowLayout.dateForColumnHeader(at: indexPath)
             view = columnHeader
         } else if kind == SupplementaryViewKinds.rowHeader {
