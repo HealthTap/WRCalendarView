@@ -161,6 +161,13 @@ public class WRWeekView: UIView {
         forceReload(true)
     }
     
+    public func removeEventWithId(_ eventId:String) {
+        self.events = self.events.filter { (event) -> Bool in
+            return event.eventId != eventId
+        }
+        forceReload(true)
+    }
+    
     public func forceReload(_ reloadEvents: Bool) {
         if reloadEvents {
             groupEventsBySection()
