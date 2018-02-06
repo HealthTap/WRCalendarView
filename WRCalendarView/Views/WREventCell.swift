@@ -18,7 +18,7 @@ class WREventCell: UICollectionViewCell {
         layer.shadowOffset = CGSize(width: 0, height: 4)
         layer.shadowRadius = 5
         layer.shadowOpacity = 0
-        
+        contentView.tag = -1
         updateColors()
     }
     
