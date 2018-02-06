@@ -79,6 +79,7 @@ public class WRWeekView: UIView {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapHandler(_:)))
         tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
         addGestureRecognizer(tapGesture)
     }
     
@@ -313,6 +314,16 @@ public class WRWeekView: UIView {
             return .vertical
         default:
             return .none
+        }
+    }
+}
+
+extension WRWeekView: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view?.tag == -1  {
+            return false
+        } else {
+            return true
         }
     }
 }
