@@ -186,12 +186,12 @@ public class WRWeekView: UIView {
 
     // MARK: - private actions
     //  Get date from point
-    fileprivate func getDateForX(_ x: CGFloat) -> Date {
+    public func getDateForX(_ x: CGFloat) -> Date {
         let section = Int((x + collectionView.contentOffset.x - flowLayout.rowHeaderWidth) / flowLayout.sectionWidth)
         return Calendar.current.date(from: flowLayout.daysForSection(section))!
     }
     
-    fileprivate func getDateForY(_ y: CGFloat) -> (Int, Int) {
+    public func getDateForY(_ y: CGFloat) -> (Int, Int) {
         let adjustedY = y - flowLayout.columnHeaderHeight + collectionView.contentOffset.y - flowLayout.contentsMargin.top - flowLayout.sectionMargin.top
         let hour = Int(adjustedY / flowLayout.hourHeight)
         let minute = Int((adjustedY / flowLayout.hourHeight - CGFloat(hour)) * 60)
