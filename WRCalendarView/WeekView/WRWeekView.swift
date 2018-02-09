@@ -69,6 +69,11 @@ public class WRWeekView: UIView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor.white
+        
+        if #available(iOS 11.0, *) {
+            collectionView.dragDelegate = self
+        }
+
         addSubview(collectionView)
 
         let views: [String: AnyObject] = ["collectionView": collectionView]
