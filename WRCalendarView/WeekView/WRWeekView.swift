@@ -39,7 +39,7 @@ public class WRWeekView: UIView {
     public var calendarType: CalendarType
     var shouldHideColumnHeader: Bool
 
-    init(calendarType: CalendarType, shouldHideColumnHeader: Bool) {
+    public init(calendarType: CalendarType, shouldHideColumnHeader: Bool) {
         self.calendarType = calendarType
         self.shouldHideColumnHeader = shouldHideColumnHeader
         super.init(frame: .zero)
