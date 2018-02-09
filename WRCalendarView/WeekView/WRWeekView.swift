@@ -427,6 +427,10 @@ extension WRWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x>0 {
+            scrollView.contentOffset.x = 0
+        }
+
         let scrollDirection = determineScrollDirectionAxis()
         var newOffset: CGPoint
         
