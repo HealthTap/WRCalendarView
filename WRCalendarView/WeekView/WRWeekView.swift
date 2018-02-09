@@ -36,28 +36,25 @@ public class WRWeekView: UIView {
     
     public weak var delegate: WRWeekViewDelegate?
 
-    public var calendarType: CalendarType = .day
+    public var calendarType: CalendarType
+    var shouldHideColumnHeader: Bool
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(calendarType: CalendarType, shouldHideColumnHeader: Bool) {
+        self.calendarType = calendarType
+        self.shouldHideColumnHeader = shouldHideColumnHeader
+        super.init(frame: .zero)
         setup()
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-
-    public convenience init(calendarType: CalendarType) {
-        self.init()
-        self.calendarType = calendarType
+        fatalError("init(coder:) has not been implemented")
     }
 
     func setup() {
         dateFormatter.dateFormat = "yyyyMMdd"
         dateFormatter.timeZone = TimeZone.current
         
-        flowLayout = WRWeekViewFlowLayout()
+        flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.shouldHideColumnHeader)
         flowLayout.delegate = self
         
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: flowLayout)
