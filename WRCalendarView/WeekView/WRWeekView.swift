@@ -475,6 +475,28 @@ extension WRWeekView: WRWeekViewFlowLayoutDelegate {
     }
 }
 
+extension WRWeekView: UICollectionViewDragDelegate {
+    @available(iOS 11.0, *)
+    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let eventCell = collectionView.cellForItem(at: indexPath) as? WREventCell else {
+            return []
+        }
+        
+        guard let event = eventCell.event else {
+            return []
+        }
+        
+        if !event.canDrag {
+            return []
+        }
+
+        let eventId = event.eventId as NSString
+        let itemProvider = NSItemProvider(object: eventId)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+}
+
 // for groupBy
 extension Sequence {
     func group<U: Hashable>(by key: (Iterator.Element) -> U) -> [U:[Iterator.Element]] {
