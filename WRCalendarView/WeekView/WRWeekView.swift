@@ -33,6 +33,7 @@ public class WRWeekView: UIView {
     
     public var calendarDate: Date!
     public var daysToShowOnScreen: Int = 0
+    public var shouldDetectTapGestureInEventCell = false
     
     public weak var delegate: WRWeekViewDelegate?
 
@@ -322,6 +323,9 @@ public class WRWeekView: UIView {
 
 extension WRWeekView: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if shouldDetectTapGestureInEventCell {
+            return true
+        }
         if touch.view?.tag == -1  {
             return false
         } else {
