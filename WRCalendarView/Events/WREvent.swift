@@ -16,7 +16,7 @@ open class WREvent: TimePeriod {
     open var backgroundColor: UIColor?
     open var borderColor: UIColor?
     open var opacity: CGFloat?
-    open var canDrag: Bool = true
+    open var canDrag: Bool = false
 
     open class func make(date:Date, chunk: TimeChunk, title: String) -> WREvent {
         let event = WREvent(beginning: date, chunk: chunk)
