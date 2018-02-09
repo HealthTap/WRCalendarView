@@ -19,6 +19,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     typealias AttDic = Dictionary<IndexPath, UICollectionViewLayoutAttributes>
     
     // UI params
+    var showColumnHeader: Bool
     var hourHeight: CGFloat!
     var rowHeaderWidth: CGFloat!
     var columnHeaderHeight: CGFloat!
@@ -73,7 +74,8 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     var currentTimeHorizontalGridlineAttributes = AttDic()
     
     // MARK:- Life cycle
-    override init() {
+    init(showColumnHeader flag: Bool) {
+        self.showColumnHeader = flag
         super.init()
         initialize()
     }
@@ -81,6 +83,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     
     deinit {
         minuteTimer?.invalidate()
@@ -89,7 +92,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     func initialize() {
         hourHeight = 100
         rowHeaderWidth = 50
-        columnHeaderHeight = 40
+        columnHeaderHeight = showColumnHeader ? 40 : 0
         hourGridDivisionValue = .minutes_15
         
         initializeMinuteTick()
