@@ -243,7 +243,10 @@ public class WRWeekView: UIView {
             
             // 처음 화면이 보여지거나 schedule type이 바뀔때만 현재 시간 보여줌
             if self.isFirst {
-                self.flowLayout.scrollCollectionViewToCurrentTime()
+                var components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+                components.hour = 7; components.minute = 0; components.second = 0;
+                let date = Calendar.current.date(from: components)!
+                self.flowLayout.scrollCollectionViewToTime(date)
                 self.isFirst = false
             }
         }
