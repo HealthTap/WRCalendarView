@@ -38,11 +38,11 @@ public class WRWeekView: UIView {
     public weak var delegate: WRWeekViewDelegate?
 
     public var calendarType: CalendarType
-    var shouldHideColumnHeader: Bool
+    var showColumnHeader: Bool
 
-    public init(calendarType: CalendarType, shouldHideColumnHeader: Bool) {
+    public init(calendarType: CalendarType, showColumnHeader: Bool) {
         self.calendarType = calendarType
-        self.shouldHideColumnHeader = shouldHideColumnHeader
+        self.showColumnHeader = showColumnHeader
         super.init(frame: .zero)
         setup()
     }
@@ -55,7 +55,7 @@ public class WRWeekView: UIView {
         dateFormatter.dateFormat = "yyyyMMdd"
         dateFormatter.timeZone = TimeZone.current
         
-        flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.shouldHideColumnHeader)
+        flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.showColumnHeader)
         flowLayout.delegate = self
         
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: flowLayout)
