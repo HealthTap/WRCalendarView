@@ -186,7 +186,14 @@ public class WRWeekView: UIView {
         updateView()
     }
 
-
+    public func updateViewToNextPage() {
+        setCurrentPage(currentPage+1, animated: true)
+    }
+    
+    public func updateViewToPreviousPage() {
+        setCurrentPage(currentPage-1, animated: true)
+    }
+    
     // MARK: - private actions
     //  Get date from point
     public func getDateForX(_ x: CGFloat) -> Date {
