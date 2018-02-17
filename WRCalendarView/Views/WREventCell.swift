@@ -55,7 +55,10 @@ class WREventCell: UICollectionViewCell {
                     let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: event.title)
                     attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
                     titleLabel.attributedText = attributeString
+                    titleLabel.textColor = textColorHighlighted()
                     contentView.backgroundColor = UIColor.lightGray
+                    contentView.alpha = 1.0
+                    contentView.layer.borderWidth = 0
                 } else {
                     titleLabel.text = event.title
                 }
