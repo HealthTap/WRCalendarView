@@ -53,7 +53,7 @@ class WREventCell: UICollectionViewCell {
                 
                 if event.isCancelled {
                     let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: event.title)
-                    attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
+                    attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
                     titleLabel.attributedText = attributeString
                     contentView.backgroundColor = UIColor.lightGray
                 } else {
