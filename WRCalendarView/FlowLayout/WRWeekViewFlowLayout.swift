@@ -20,6 +20,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     // UI params
     var showColumnHeader: Bool
+    var currentTimeViewOffset: CGFloat!
     var hourHeight: CGFloat!
     var rowHeaderWidth: CGFloat!
     var columnHeaderHeight: CGFloat!
@@ -92,7 +93,13 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     func initialize() {
         hourHeight = 100
         rowHeaderWidth = 50
-        columnHeaderHeight = showColumnHeader ? 40 : 0
+        currentTimeViewOffset = 0
+        columnHeaderHeight = 40
+        if !showColumnHeader {
+            currentTimeViewOffset = columnHeaderHeight
+            columnHeaderHeight = 0
+        }
+
         hourGridDivisionValue = .minutes_15
         
         initializeMinuteTick()
@@ -195,7 +202,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         
         let currentTimeIndicatorMinY: CGFloat = timeY - nearbyint(currentTimeIndicatorSize.height / 2.0)
         let currentTimeIndicatorMinX: CGFloat = (max(collectionView!.contentOffset.x, 0.0) + (rowHeaderWidth - currentTimeIndicatorSize.width))
-        attributes.frame = CGRect(origin: CGPoint(x: currentTimeIndicatorMinX, y: currentTimeIndicatorMinY),
+        attributes.frame = CGRect(origin: CGPoint(x: currentTimeIndicatorMinX, y: currentTimeIndicatorMinY-currentTimeViewOffset),
                                                       size: currentTimeIndicatorSize)
         attributes.zIndex = zIndexForElementKind(DecorationViewKinds.currentTimeIndicator)
         
@@ -208,7 +215,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         let currentTimeHorizontalGridlineXOffset = calendarGridMinX + sectionMargin.left
         let currentTimeHorizontalGridlineMinX = max(currentTimeHorizontalGridlineXOffset, collectionView!.contentOffset.x + currentTimeHorizontalGridlineXOffset)
         let currentTimehorizontalGridlineWidth = min(calendarGridWidth, collectionView!.frame.size.width)
-        attributes.frame = CGRect(x: currentTimeHorizontalGridlineMinX, y: currentTimeHorizontalGridlineMinY,
+        attributes.frame = CGRect(x: currentTimeHorizontalGridlineMinX, y: currentTimeHorizontalGridlineMinY-currentTimeViewOffset,
                                   width: currentTimehorizontalGridlineWidth, height: gridThickness);
         attributes.zIndex = zIndexForElementKind(DecorationViewKinds.currentTimeGridline)
         
