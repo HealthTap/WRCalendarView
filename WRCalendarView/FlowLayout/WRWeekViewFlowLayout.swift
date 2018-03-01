@@ -92,7 +92,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     func initialize() {
         hourHeight = 100
-        rowHeaderWidth = 50
+        rowHeaderWidth = 60
         currentTimeViewOffset = 0
         columnHeaderHeight = 40
         if !showColumnHeader {
