@@ -14,9 +14,7 @@ class WRCurrentTimeIndicator: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        dateFormatter.amSymbol = "am"
-        dateFormatter.pmSymbol = "pm"
-        dateFormatter.setLocalizedDateFormatFromTemplate("HH:mm a")
+        dateFormatter.dateFormat = "h:mm a"
         
         let timer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
         RunLoop.current.add(timer, forMode: .defaultRunLoopMode)
