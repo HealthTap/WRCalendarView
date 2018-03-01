@@ -14,7 +14,9 @@ class WRRowHeader: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.amSymbol = "am"
+        dateFormatter.pmSymbol = "pm"
+        dateFormatter.setLocalizedDateFormatFromTemplate("HH:mm a")
     }
 
     var date: Date? {
