@@ -96,7 +96,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         columnHeaderHeight = 40
         currentTimeViewOffset = rowHeaderWidth - columnHeaderHeight
         if !showColumnHeader {
-            currentTimeViewOffset += columnHeaderHeight
+            currentTimeViewOffset = currentTimeViewOffset + columnHeaderHeight
             columnHeaderHeight = 0
         }
 
