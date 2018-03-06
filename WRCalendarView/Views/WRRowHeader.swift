@@ -23,10 +23,11 @@ class WRRowHeader: UICollectionReusableView {
                 calendar.component(.hour, from: date) != 0 && calendar.component(.hour, from: date) != 24 {
                 timeLbl.text = dateFormatter.string(from: date)
                     
-                let dateMinutes = calendar.component(.minute, from: date)
                 let currentTimeMinutes = calendar.component(.minute, from: Date())
                 
-                if calendar.component(.hour, from: Date()) == calendar.component(.hour, from: date) &&  abs(dateMinutes - currentTimeMinutes) < 8 {
+                if calendar.component(.hour, from: Date())+1 == calendar.component(.hour, from: date) && currentTimeMinutes > 52 {
+                    timeLbl.isHidden = true
+                } else if calendar.component(.hour, from: Date()) == calendar.component(.hour, from: date) && currentTimeMinutes < 8 {
                     timeLbl.isHidden = true
                 } else {
                     timeLbl.isHidden = false
