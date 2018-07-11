@@ -287,8 +287,12 @@ public class WRWeekView: UIView {
         y: collectionView.contentOffset.y),
                                         animated: animated)
         
-        delegate?.view(startDate: flowLayout.dateForColumnHeader(at: IndexPath(row: 0, section: (currentPage - 1) * daysToShowOnScreen)),
-                       interval: daysToShowOnScreen)
+        let startDate =  flowLayout.dateForColumnHeader(at: IndexPath(row: 0, section: (currentPage - 1) * daysToShowOnScreen))
+        
+        flowLayout.currentPageStartDate = startDate
+        flowLayout.currentPageInterval = daysToShowOnScreen
+        
+        delegate?.view(startDate: startDate, interval: daysToShowOnScreen)
     }
     
     // directionalLockEnabled 이 제대로 작동안해서 직접 막아야 함

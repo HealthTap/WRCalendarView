@@ -52,7 +52,10 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     var minuteTimer: Timer?
-   
+    
+    var currentPageStartDate: Date?
+    var currentPageInterval: Int?
+    
     // Attributes
     var cachedDayDateComponents = Dictionary<Int, DateComponents>()
     var cachedCurrentTimeComponents = Dictionary<Int, DateComponents>()
@@ -461,16 +464,17 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     func layoutAttributesForDecorationView(at indexPath: IndexPath,
                                            ofKind kind: String,
                                            withItemCache itemCache: AttDic) -> (UICollectionViewLayoutAttributes, AttDic) {
-        var layoutAttributes = itemCache[indexPath]
         
-        if layoutAttributes == nil {
-            var _itemCache = itemCache
-            layoutAttributes = UICollectionViewLayoutAttributes(forDecorationViewOfKind: kind, with: indexPath)
-            _itemCache[indexPath] = layoutAttributes
-            return (layoutAttributes!, _itemCache)
-        } else {
-            return (layoutAttributes!, itemCache)
+        let layoutAttributes = itemCache[indexPath] ?? UICollectionViewLayoutAttributes(forDecorationViewOfKind: kind, with: indexPath)
+        
+        if let startDate = currentPageStartDate, let interval = currentPageInterval,
+            (kind == DecorationViewKinds.currentTimeGridline || kind == DecorationViewKinds.currentTimeIndicator) {
+            layoutAttributes.isHidden = !startDate.isToday && interval == 1 /* Week view */
         }
+        
+        var newCache = itemCache
+        newCache[indexPath] = layoutAttributes
+        return (layoutAttributes, newCache)
     }
     
     func layoutAttributesForSupplemantaryView(at indexPath: IndexPath,
