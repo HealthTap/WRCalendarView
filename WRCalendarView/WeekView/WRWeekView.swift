@@ -30,7 +30,8 @@ public class WRWeekView: UIView {
     var daysToShow: Int = 0
     var events = [WREvent]()
     var eventBySection = [String: [WREvent]]()
-    
+    var isNextPreviousButtonClicked = false
+
     public var calendarDate: Date!
     public var daysToShowOnScreen: Int = 0
     public var shouldDetectTapGestureInEventCell = false
@@ -187,10 +188,12 @@ public class WRWeekView: UIView {
     }
 
     public func updateViewToNextPage() {
+        isNextPreviousButtonClicked = true
         setCurrentPage(currentPage+1, animated: true)
     }
     
     public func updateViewToPreviousPage() {
+        isNextPreviousButtonClicked = true
         setCurrentPage(currentPage-1, animated: true)
     }
     
@@ -319,15 +322,18 @@ public class WRWeekView: UIView {
     }
     
     fileprivate func determineScrollDirectionAxis() -> ScrollDirection {
-        let scrollDirection = determineScrollDirection()
-        
-        switch scrollDirection {
-        case .left, .right:
+        if isNextPreviousButtonClicked {
             return .horizontal
-        case .up, .down:
-            return .vertical
-        default:
-            return .none
+        } else {
+            let scrollDirection = determineScrollDirection()
+            switch scrollDirection {
+            case .left, .right:
+                return .horizontal
+            case .up, .down:
+                return .vertical
+            default:
+                return .none
+            }
         }
     }
 }
@@ -436,6 +442,7 @@ extension WRWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
         if currentPage < Int(pageCount / 2) {
             loadPrevPage()
         }
+        isNextPreviousButtonClicked = false
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
