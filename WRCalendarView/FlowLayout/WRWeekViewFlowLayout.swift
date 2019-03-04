@@ -238,7 +238,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
                                               ofKind: DecorationViewKinds.cornerHeader,
                                               withItemCache: cornerHeaderAttributes)
         attributes.frame = CGRect(origin: collectionView!.contentOffset,
-                                  size: CGSize.init(width: rowHeaderWidth, height: columnHeaderHeight))
+                                  size: CGSize.init(width: rowHeaderWidth, height: columnHeaderHeight-5))
         attributes.zIndex = zIndexForElementKind(DecorationViewKinds.cornerHeader)
 
         // row header
