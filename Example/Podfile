@@ -2,12 +2,18 @@ use_frameworks!
 
 target 'WRCalendarView_Example' do
   pod 'WRCalendarView', :path => '../'
-  pod 'DropDownMenuKit'
-  
+  pod 'DropDownMenuKit', :git => 'https://github.com/qmathe/DropDownMenuKit.git'
+
   target 'WRCalendarView_Tests' do
     inherit! :search_paths
 
-    pod 'Quick', '~> 1.0.0'
-    pod 'Nimble', '~> 5.1.1'
+    pod 'Quick'
+    pod 'Nimble'
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['SWIFT_VERSION'] = '4.2'
   end
 end

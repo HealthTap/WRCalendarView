@@ -17,7 +17,7 @@ class WRCurrentTimeIndicator: UICollectionReusableView {
         dateFormatter.dateFormat = "h:mm a"
         
         let timer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-        RunLoop.current.add(timer, forMode: .defaultRunLoopMode)
+        RunLoop.current.add(timer, forMode: .default)
         
         updateTimer()
     }

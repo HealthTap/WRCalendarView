@@ -110,7 +110,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     func initializeMinuteTick() {
         minuteTimer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(minuteTick), userInfo: nil, repeats: true)
-        RunLoop.current.add(minuteTimer!, forMode: .defaultRunLoopMode)
+        RunLoop.current.add(minuteTimer!, forMode: .default)
     }
 
     @objc func minuteTick() {

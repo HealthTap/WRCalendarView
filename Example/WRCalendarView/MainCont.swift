@@ -44,7 +44,7 @@ class MainCont: UIViewController {
         navigationBarMenu.container = view
     }
     
-    func moveToToday() {
+    @objc func moveToToday() {
         weekView.setCalendarDate(Date(), animated: true)
     }
     
@@ -96,18 +96,13 @@ class MainCont: UIViewController {
         navigationBarMenu.menuCells = [firstCell, secondCell]
         navigationBarMenu.selectMenuCell(firstCell)
         
-        // If we set the container to the controller view, the value must be set
-        // on the hidden content offset (not the visible one)
-        navigationBarMenu.visibleContentOffset =
-            navigationController!.navigationBar.frame.size.height + statusBarHeight()
-        
         // For a simple gray overlay in background
         navigationBarMenu.backgroundView = UIView(frame: navigationBarMenu.bounds)
         navigationBarMenu.backgroundView!.backgroundColor = UIColor.black
         navigationBarMenu.backgroundAlpha = 0.7
     }
     
-    func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
+    @objc func willToggleNavigationBarMenu(_ sender: DropDownTitleView) {
         if sender.isUp {
             navigationBarMenu.hide()
         } else {
@@ -115,15 +110,12 @@ class MainCont: UIViewController {
         }
     }
     
-    func updateMenuContentOffsets() {
-        navigationBarMenu.visibleContentOffset =
-            navigationController!.navigationBar.frame.size.height + statusBarHeight()
+    func updateMenuContentOffsets() {}
+    
+    @objc func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
     }
     
-    func didToggleNavigationBarMenu(_ sender: DropDownTitleView) {
-    }
-    
-    func choose(_ sender: AnyObject) {
+    @objc func choose(_ sender: AnyObject) {
         if let sender = sender as? DropDownMenuCell {
             titleView.title = sender.textLabel!.text
         
