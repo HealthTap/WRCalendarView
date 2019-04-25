@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WRCalendarView'
-  s.version          = '1.0.1'
+  s.version          = '2.0.0'
   s.summary          = 'Calendar Day and Week View for iOS'
   s.description      = 'Calendar Day and Week View for iOS'
   s.homepage         = 'https://github.com/wayfinders/WRCalendarView'
@@ -18,10 +18,10 @@ Pod::Spec.new do |s|
   s.author           = { 'wayfinder' => 'wayfinder12@gmail.com' }
   s.source           = { :git => 'https://github.com/wayfinders/WRCalendarView.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '11.0'
 
   s.source_files = 'WRCalendarView/**/*'
-  
+
   s.resource_bundles = {
     'WRCalendarView' => ['WRCalendarView/**/*.{storyboard,xib}']
   }
