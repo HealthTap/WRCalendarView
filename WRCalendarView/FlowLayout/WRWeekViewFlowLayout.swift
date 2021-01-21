@@ -37,7 +37,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     var maxSectionHeight: CGFloat { return columnHeaderHeight + hourHeight * 24 }
     var currentTimeIndicatorSize: CGSize { return CGSize(width: rowHeaderWidth, height: 10.0) }
-    let sectionMargin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    let sectionMargin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
     let cellMargin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     let contentsMargin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     
@@ -332,7 +332,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
                 layoutAttributesForDecorationView(at: IndexPath(item: 0, section: 0),
                                                   ofKind: DecorationViewKinds.todayBackground,
                                                   withItemCache: todayBackgroundAttributes)
-            attributes.frame = CGRect(x: sectionX, y: 0, width: sectionWidth, height: sectionHeight + calendarStartY)
+            attributes.frame = CGRect(x: sectionX, y: 0, width: sectionWidth + sectionMargin.left + sectionMargin.right, height: sectionHeight + calendarStartY)
             attributes.zIndex = zIndexForElementKind(DecorationViewKinds.todayBackground)
         }
     }
@@ -493,93 +493,215 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     func adjustItemsForOverlap(_ sectionItemAttributes: [UICollectionViewLayoutAttributes], inSection: Int, sectionMinX: CGFloat) {
-        var adjustedAttributes = Set<UICollectionViewLayoutAttributes>()
-        var sectionZ = minCellZ
-        
-        for itemAttributes in sectionItemAttributes {
-            // If an item's already been adjusted, move on to the next one
-            if adjustedAttributes.contains(itemAttributes) {
-                continue
+
+        // Overlapping events are handled by dividng the column (section) into the number of overlapping events.
+        // The earliest event (the top one in the column) is always the full width of the column. The later ones start
+        // at an inset from the left edge, and then extend the rest of the way to the right edge. (This is similar to
+        // Google calendar behavior). If there are two overlapping events, the later sits above the earlier event and
+        // takes up only the left half othe column.  If there are there are three, the second sits above the first and
+        // takes up the left two-thirds of the column, and the third sets above the first two and takes up the last
+        // one-third.
+
+        // This is a helper type that combines layout attributes with overlapping information.
+        class Event {
+            // This gives the offset of the drawn event from the left border of the column.  The actual
+            // offset in pixels depends on both this parameter and the number of column divisions.
+            var offsetIndex: Int = 0
+
+            // The gives the maximum number of events that this event is overlapped with at any point in
+            // the column. It is used to calculate the number of required column divisions.
+            var maxOverlapDepth: Int = 1
+
+            // The actual layout attributes of this event. We ultimately want to adjust the frame property
+            // of these attributes.
+            let attributes: UICollectionViewLayoutAttributes
+
+            init(attributes: UICollectionViewLayoutAttributes) {
+                self.attributes = attributes
             }
-            
-            // Find the other items that overlap with this item
-            var overlappingItems = [UICollectionViewLayoutAttributes]()
-            let itemFrame = itemAttributes.frame
-            
-            overlappingItems.append(contentsOf: sectionItemAttributes.filter {
-                if $0 != itemAttributes {
-                    return itemFrame.intersects($0.frame)
-                } else {
-                    return false
-                }
-            })
-            
-            // If there's items overlapping, we need to adjust them
-            if overlappingItems.count > 0 {
-                // Add the item we're adjusting to the overlap set
-                overlappingItems.insert(itemAttributes, at: 0)
-                var minY = CGFloat.greatestFiniteMagnitude
-                var maxY = CGFloat.leastNormalMagnitude
-                
-                for overlappingItemAttributes in overlappingItems {
-                    if overlappingItemAttributes.frame.minY < minY {
-                        minY = overlappingItemAttributes.frame.minY
-                    }
-                    if overlappingItemAttributes.frame.maxY > maxY {
-                        maxY = overlappingItemAttributes.frame.maxY
-                    }
-                }
-                
-                // Determine the number of divisions needed (maximum number of currently overlapping items)
-                var divisions = 1
-                
-                for currentY in stride(from: minY, to: maxY, by: 1) {
-                    var numberItemsForCurrentY = 0
-                    
-                    for overlappingItemAttributes in overlappingItems {
-                        if currentY >= overlappingItemAttributes.frame.minY &&
-                            currentY < overlappingItemAttributes.frame.maxY {
-                            numberItemsForCurrentY += 1
-                        }
-                    }
-                    if numberItemsForCurrentY > divisions {
-                        divisions = numberItemsForCurrentY
-                    }
-                }
-                
-                // Adjust the items to have a width of the section size divided by the number of divisions needed
-                let divisionWidth = nearbyint(sectionWidth / CGFloat(divisions))
-                var dividedAttributes = [UICollectionViewLayoutAttributes]()
-                
-                for divisionAttributes in overlappingItems {
-                    let itemWidth = divisionWidth - cellMargin.left - cellMargin.right
-                    
-                    // It it hasn't yet been adjusted, perform adjustment
-                    if !adjustedAttributes.contains(divisionAttributes) {
-                        var divisionAttributesFrame = divisionAttributes.frame
-                        divisionAttributesFrame.origin.x = sectionMinX + cellMargin.left
-                        divisionAttributesFrame.size.width = itemWidth
-                        
-                        // Horizontal Layout
-                        var adjustments = 1
-                        for dividedItemAttributes in dividedAttributes {
-                            if dividedItemAttributes.frame.intersects(divisionAttributesFrame) {
-                                divisionAttributesFrame.origin.x = sectionMinX + ((divisionWidth * CGFloat(adjustments)) + cellMargin.left)
-                                adjustments += 1
-                            }
-                        }
-                        
-                        // Stacking (lower items stack above higher items, since the title is at the top)
-                        divisionAttributes.zIndex = sectionZ
-                        sectionZ += 1
-                        
-                        divisionAttributes.frame = divisionAttributesFrame
-                        dividedAttributes.append(divisionAttributes)
-                        adjustedAttributes.insert(divisionAttributes)
-                    }
-                 }
+
+            var maxY: CGFloat { attributes.frame.maxY }
+            var minY: CGFloat { attributes.frame.minY }
+        }
+
+        // Start by sorting events from top to bottom
+        let events = sectionItemAttributes
+            .sorted(by: { $0.frame.minY < $1.frame.minY })
+            .map{ Event(attributes: $0) }
+
+        guard let firstEvent = events.first else { return }
+
+        // This structure maintains the current stack of currently overlapped events as we
+        // go through the loop below.
+        // It should be sorted by `stackIndex`
+        var overlappingEvents: [Event] = [firstEvent]
+
+        // Take a pass through all the events and capture the required overlap information
+        for event in events.dropFirst() {
+            // Get all overlapping events for the current loop event. (Note that once a previous
+            // event doesn't overlap with the loop event, it cannot overlap with any future loop event.)
+            overlappingEvents = overlappingEvents.filter { $0.maxY >= event.minY }
+
+            // Find if there is any "gap" in the offset indexes where we can insert this new event.
+            let insertionIndex = overlappingEvents.enumerated()
+                .first(where: { (idx, event) in event.offsetIndex != idx })
+                .map{ (idx, _) in idx }
+
+            // Handle the insertion if there is such a gap; otherwise, append this overlapping event
+            if let insertionIndex = insertionIndex {
+                event.offsetIndex = insertionIndex
+                overlappingEvents.insert(event, at: insertionIndex)
+            } else {
+                event.offsetIndex = overlappingEvents.count
+                overlappingEvents.append(event)
+            }
+
+            // The max stack depth for an event is the greater of either the existing overlapped items max stack depth,
+            // or the current stack depth.
+            let stackDepth =  max(overlappingEvents.map{ $0.maxOverlapDepth }.max()!, overlappingEvents.count)
+            overlappingEvents.forEach { $0.maxOverlapDepth = stackDepth }
+        }
+
+        // Now config for all event attributes
+        events.forEach { event in
+            let divisionWidth = nearbyint(sectionWidth / CGFloat(event.maxOverlapDepth))
+            if divisionWidth >= 40 {
+                assert(event.maxOverlapDepth > event.offsetIndex)
+                event.attributes.size.width = divisionWidth * CGFloat(event.maxOverlapDepth - event.offsetIndex) - cellMargin.left - cellMargin.right
+                event.attributes.frame.origin.x = sectionMinX + divisionWidth * CGFloat(event.offsetIndex) + cellMargin.left
+                event.attributes.zIndex = minCellZ + event.offsetIndex
+            } else {
+                event.attributes.zIndex = minCellZ + event.offsetIndex
             }
         }
+
+        // Previously, overlapping events were handled by splitting the column into divisions and putting each event
+        // into its own divistion. The major difference here is that there is no visual overlap of events, and the
+        // entire event is modified, even if there is only a small overlap with another event. That code is commented
+        // out below, in case we want to revert to that behaviour.
+        //
+        //  let divisionWidth = nearbyint(sectionWidth / CGFloat(divisions))
+        //                var dividedAttributes = [UICollectionViewLayoutAttributes]()
+        //
+        //                for divisionAttributes in overlappingItems {
+        //                    let itemWidth = divisionWidth - cellMargin.left - cellMargin.right
+        //
+        //                    // It it hasn't yet been adjusted, perform adjustment
+        //                    if !adjustedAttributes.contains(divisionAttributes) {
+        //                        var divisionAttributesFrame = divisionAttributes.frame
+        //                        divisionAttributesFrame.origin.x = sectionMinX + cellMargin.left
+        //                        divisionAttributesFrame.size.width = itemWidth
+        //
+        //                        // Horizontal Layout
+        //                        var adjustments = 1
+        //                        for dividedItemAttributes in dividedAttributes {
+        //                            if dividedItemAttributes.frame.intersects(divisionAttributesFrame) {
+        //                                divisionAttributesFrame.origin.x = sectionMinX + ((divisionWidth * CGFloat(adjustments)) + cellMargin.left)
+        //                                adjustments += 1
+        //                            }
+        //                        }
+        //
+        //                        // Stacking (lower items stack above higher items, since the title is at the top)
+        //                        divisionAttributes.zIndex = sectionZ
+        //                        sectionZ += 1
+        //
+        //                        divisionAttributes.frame = divisionAttributesFrame
+        //                        dividedAttributes.append(divisionAttributes)
+        //                        adjustedAttributes.insert(divisionAttributes)
+        //                    }
+        //                 }
+
+
+//        var adjustedAttributes = Set<UICollectionViewLayoutAttributes>()
+//        var sectionZ = minCellZ
+//
+//        for itemAttributes in sectionItemAttributes {
+//            // If an item's already been adjusted, move on to the next one
+//            if adjustedAttributes.contains(itemAttributes) {
+//                continue
+//            }
+//
+//            // Find the other items that overlap with this item
+//            var overlappingItems = [UICollectionViewLayoutAttributes]()
+//            let itemFrame = itemAttributes.frame
+//
+//            overlappingItems.append(contentsOf: sectionItemAttributes.filter {
+//                if $0 != itemAttributes {
+//                    return itemFrame.intersects($0.frame)
+//                } else {
+//                    return false
+//                }
+//            })
+//
+//
+//            // If there's items overlapping, we need to adjust them
+//            if overlappingItems.count > 0 {
+//                // Add the item we're adjusting to the overlap set
+//                overlappingItems.insert(itemAttributes, at: 0)
+//                var minY = CGFloat.greatestFiniteMagnitude
+//                var maxY = CGFloat.leastNormalMagnitude
+//
+//                for overlappingItemAttributes in overlappingItems {
+//                    if overlappingItemAttributes.frame.minY < minY {
+//                        minY = overlappingItemAttributes.frame.minY
+//                    }
+//                    if overlappingItemAttributes.frame.maxY > maxY {
+//                        maxY = overlappingItemAttributes.frame.maxY
+//                    }
+//                }
+//
+//                overlappingItems.sort(by: { $0.frame.minY < $1.frame.minY })
+//
+//                // Determine the number of divisions needed (maximum number of currently overlapping items)
+//                var divisions = 1
+//
+//                for currentY in stride(from: minY, to: maxY, by: 1) {
+//                    var numberItemsForCurrentY = 0
+//
+//                    for overlappingItemAttributes in overlappingItems {
+//                        if currentY >= overlappingItemAttributes.frame.minY &&
+//                            currentY < overlappingItemAttributes.frame.maxY {
+//                            numberItemsForCurrentY += 1
+//                        }
+//                    }
+//                    if numberItemsForCurrentY > divisions {
+//                        divisions = numberItemsForCurrentY
+//                    }
+//                }
+//
+//                // Adjust the items to have a width of the section size divided by the number of divisions needed
+//                let divisionWidth = nearbyint(sectionWidth / CGFloat(divisions))
+//                var dividedAttributes = [UICollectionViewLayoutAttributes]()
+//
+//                for divisionAttributes in overlappingItems {
+//                    let itemWidth = divisionWidth - cellMargin.left - cellMargin.right
+//
+//                    // It it hasn't yet been adjusted, perform adjustment
+//                    if !adjustedAttributes.contains(divisionAttributes) {
+//                        var divisionAttributesFrame = divisionAttributes.frame
+//                        divisionAttributesFrame.origin.x = sectionMinX + cellMargin.left
+//                        divisionAttributesFrame.size.width = itemWidth
+//
+//                        // Horizontal Layout
+//                        var adjustments = 1
+//                        for dividedItemAttributes in dividedAttributes {
+//                            if dividedItemAttributes.frame.intersects(divisionAttributesFrame) {
+//                                divisionAttributesFrame.origin.x = sectionMinX + ((divisionWidth * CGFloat(adjustments)) + cellMargin.left)
+//                                adjustments += 1
+//                            }
+//                        }
+//
+//                        // Stacking (lower items stack above higher items, since the title is at the top)
+//                        divisionAttributes.zIndex = sectionZ
+//                        sectionZ += 1
+//
+//                        divisionAttributes.frame = divisionAttributesFrame
+//                        dividedAttributes.append(divisionAttributes)
+//                        adjustedAttributes.insert(divisionAttributes)
+//                    }
+//                 }
+//            }
+//        }
     }
     
     func invalidateLayoutCache() {
