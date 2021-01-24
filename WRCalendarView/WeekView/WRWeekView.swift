@@ -12,7 +12,7 @@ import DateToolsSwift
 public protocol WRWeekViewDelegate: NSObjectProtocol  {
     func view(startDate: Date, interval: Int)
     func tap(date: Date)
-    func selectEvent(_ event: WREvent)
+    func selectEvent(_ event: WREventType)
 }
 
 public class WRWeekView: UIView {
@@ -28,8 +28,8 @@ public class WRWeekView: UIView {
     var loading = false
     var isFirst = true
     var daysToShow: Int = 0
-    var events = [WREvent]()
-    var eventBySection = [String: [WREvent]]()
+    var events = [WREventType]()
+    var eventBySection = [String: [WREventType]]()
     var isNextPreviousButtonClicked = false
 
     public var calendarDate: Date!
@@ -125,7 +125,7 @@ public class WRWeekView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        flowLayout.sectionWidth = (frame.width - flowLayout.rowHeaderWidth) / CGFloat(daysToShowOnScreen)
+        flowLayout.setColumnWidth((frame.width - flowLayout.rowHeaderWidth) / CGFloat(daysToShowOnScreen))
     }
     
     @objc func tapHandler(_ recognizer: UITapGestureRecognizer) {
@@ -151,24 +151,24 @@ public class WRWeekView: UIView {
     }
 
     // MARK: - events
-    public func setEvents(events: [WREvent]) {
+    public func setEvents(events: [WREventType]) {
         self.events = events
         forceReload(true)
     }
     
-    public func addEvent(event: WREvent) {
+    public func addEvent(event: WREventType) {
         events.append(event)
         forceReload(true)
     }
     
-    public func addEvents(events: [WREvent]) {
+    public func addEvents(events: [WREventType]) {
         self.events.append(contentsOf: events)
         forceReload(true)
     }
     
-    public func removeEventWithId(_ eventId:String) {
+    public func removeEventWithId(_ id: String) {
         self.events = self.events.filter { (event) -> Bool in
-            return event.eventId != eventId
+            return event.id != id
         }
         forceReload(true)
     }
@@ -222,13 +222,7 @@ public class WRWeekView: UIView {
     }
     
     fileprivate func groupEventsBySection() {
-        eventBySection = events.group {
-            if let date = $0.beginning {
-                return dateFormatter.string(from: date)
-            } else {
-                return ""
-            }
-        }
+        eventBySection = events.group { dateFormatter.string(from: $0.startDate) }
     }
     
     fileprivate func updateView(_ animated: Bool = false) {
@@ -480,7 +474,7 @@ extension WRWeekView: WRWeekViewFlowLayoutDelegate {
 
         if let events = eventBySection[key] {
             let event = events[indexPath.item]
-            return event.beginning!
+            return event.startDate
         } else {
             fatalError()
         }
@@ -492,7 +486,7 @@ extension WRWeekView: WRWeekViewFlowLayoutDelegate {
         
         if let events = eventBySection[key] {
             let event = events[indexPath.item]
-            return event.end!
+            return event.endDate
         } else {
             fatalError()
         }
@@ -514,7 +508,7 @@ extension WRWeekView: UICollectionViewDragDelegate {
             return []
         }
 
-        let eventId = event.eventId as NSString
+        let eventId = event.id as NSString
         let itemProvider = NSItemProvider(object: eventId)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]

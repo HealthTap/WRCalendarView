@@ -21,22 +21,32 @@
                 <rect key="frame" x="0.0" y="0.0" width="183" height="168"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
-                        <rect key="frame" x="4" y="4" width="175" height="40"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
+                        <rect key="frame" x="4" y="4" width="175" height="14"/>
+                        <fontDescription key="fontDescription" name="NotoSans" family="Noto Sans" pointSize="10"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FvK-VC-I1R">
+                        <rect key="frame" x="4" y="18" width="175" height="14"/>
                         <fontDescription key="fontDescription" name="NotoSans" family="Noto Sans" pointSize="10"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" red="0.29803921568627451" green="0.84705882352941175" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="FvK-VC-I1R" firstAttribute="leading" secondItem="SvP-El-S0W" secondAttribute="leading" id="0iN-PT-uDu"/>
+                <constraint firstItem="FvK-VC-I1R" firstAttribute="trailing" secondItem="SvP-El-S0W" secondAttribute="trailing" id="3YM-V4-iug"/>
+                <constraint firstItem="FvK-VC-I1R" firstAttribute="top" secondItem="SvP-El-S0W" secondAttribute="bottom" id="GVc-l7-aKK"/>
                 <constraint firstItem="SvP-El-S0W" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="4" id="b3r-0k-3e2"/>
                 <constraint firstAttribute="trailing" secondItem="SvP-El-S0W" secondAttribute="trailing" constant="4" id="xU5-u9-h7a"/>
                 <constraint firstItem="SvP-El-S0W" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="zZH-qO-2W1"/>
             </constraints>
             <size key="customSize" width="183" height="168"/>
             <connections>
+                <outlet property="subtitleLabel" destination="FvK-VC-I1R" id="8Fo-c9-oIm"/>
                 <outlet property="titleLabel" destination="SvP-El-S0W" id="oEn-93-BpK"/>
             </connections>
             <point key="canvasLocation" x="-32.799999999999997" y="112.44377811094454"/>
