@@ -10,8 +10,10 @@ import UIKit
 class WRRowHeader: UICollectionReusableView {
     @IBOutlet weak var timeLbl: UILabel!
     let dateFormatter = DateFormatter()
-    let calendar = Calendar.current
-    
+    var calendar = Calendar.current {
+        didSet { dateFormatter.timeZone = calendar.timeZone }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         dateFormatter.dateFormat = "h:mm a"

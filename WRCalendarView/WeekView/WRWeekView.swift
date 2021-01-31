@@ -35,10 +35,31 @@ public class WRWeekView: UIView {
     public var calendarDate: Date!
     public var daysToShowOnScreen: Int = 0
     public var shouldDetectTapGestureInEventCell = false
+    public var timeZone: TimeZone {
+        set {
+            guard newValue != calendar.timeZone else { return }
+            calendar.timeZone = newValue
+            flowLayout.calendar.timeZone = newValue
+            flowLayout.configureCurrentTimeIndicator()
+            dateFormatter.timeZone = timeZone
+            updateView()
+        }
+        get { calendar.timeZone }
+    }
+
+    private var calendar = Calendar(identifier: .gregorian)
+
+    // These are the visible dates along with some nearby ones that could be seen when the user scrolls.
+    public var visibleDates: [Date] {
+        guard let currentPage = currentPage else { return [] }
+        let startDate =  flowLayout.dateForColumnHeader(at: IndexPath(row: 0, section: (currentPage - 1) * daysToShowOnScreen))
+        return (-daysToShowOnScreen ..< 2*daysToShowOnScreen).compactMap { calendar.date(byAdding: .day, value: $0, to: startDate) }
+    }
     
     public weak var delegate: WRWeekViewDelegate?
 
-    public var calendarType: CalendarType
+    public private(set) var calendarType: CalendarType
+
     var showColumnHeader: Bool
 
     public init(calendarType: CalendarType, showColumnHeader: Bool) {
@@ -54,9 +75,9 @@ public class WRWeekView: UIView {
 
     func setup() {
         dateFormatter.dateFormat = "yyyyMMdd"
-        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.timeZone = calendar.timeZone
         
-        flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.showColumnHeader)
+        flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.showColumnHeader, calendar: calendar)
         flowLayout.delegate = self
         
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: flowLayout)
@@ -131,12 +152,12 @@ public class WRWeekView: UIView {
     @objc func tapHandler(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: self)
         
-        var components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: getDateForX(point.x))
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: getDateForX(point.x))
         let (hour, minute) = getDateForY(point.y)
         components.hour = hour
         components.minute = minute
         
-        delegate?.tap(date: Calendar.current.date(from: components)!)
+        delegate?.tap(date: calendar.date(from: components)!)
     }
     
     // MARK: - public actions
@@ -201,7 +222,7 @@ public class WRWeekView: UIView {
     //  Get date from point
     public func getDateForX(_ x: CGFloat) -> Date {
         let section = Int((x + collectionView.contentOffset.x - flowLayout.rowHeaderWidth) / flowLayout.sectionWidth)
-        return Calendar.current.date(from: flowLayout.daysForSection(section))!
+        return calendar.date(from: flowLayout.daysForSection(section))!
     }
     
     public func getDateForY(_ y: CGFloat) -> (Int, Int) {
@@ -229,8 +250,8 @@ public class WRWeekView: UIView {
         switch calendarType {
         case .week:
             daysToShowOnScreen = 7
-            let weekComponent = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: calendarDate)
-            startDate = Calendar.current.date(from: weekComponent)
+            let weekComponent = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: calendarDate)
+            startDate = calendar.date(from: weekComponent)
         case .day:
             daysToShowOnScreen = 1
             startDate = calendarDate
@@ -239,7 +260,6 @@ public class WRWeekView: UIView {
         currentPage = Int(pageCount / 2) + 1
         daysToShow = daysToShowOnScreen * pageCount
         initDate = startDate - (daysToShowOnScreen * (currentPage - 1)).days
-        
         DispatchQueue.main.async { [unowned self] in
             self.layoutSubviews()
             self.forceReload(false)
@@ -396,12 +416,14 @@ extension WRWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
             
             columnHeader.calendarType = self.calendarType
             columnHeader.date = flowLayout.dateForColumnHeader(at: indexPath)
+            columnHeader.calendar = self.calendar
             view = columnHeader
         } else if kind == SupplementaryViewKinds.rowHeader {
             let rowHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                             withReuseIdentifier: ReuseIdentifiers.rowHeader,
                                                                             for: indexPath) as! WRRowHeader
             rowHeader.date = flowLayout.dateForTimeRowHeader(at: indexPath)
+            rowHeader.calendar = self.calendar
             view = rowHeader
         } else {
             view = UICollectionReusableView()

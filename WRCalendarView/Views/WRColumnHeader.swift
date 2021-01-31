@@ -11,7 +11,9 @@ import DateToolsSwift
 
 class WRColumnHeader: UICollectionReusableView {
     @IBOutlet weak var weekdayLbl: UILabel!
-    let calendar = Calendar.current
+    var calendar = Calendar.current {
+        didSet { dateFormatter.timeZone = calendar.timeZone }
+    }
     let dateFormatter = DateFormatter()
     
     override func awakeFromNib() {

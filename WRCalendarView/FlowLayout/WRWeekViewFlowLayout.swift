@@ -47,7 +47,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             return cachedCurrentTimeComponents[0]!
         }
 
-        cachedCurrentTimeComponents[0] = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+        cachedCurrentTimeComponents[0] = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
         return cachedCurrentTimeComponents[0]!
     }
 
@@ -77,9 +77,12 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     var currentTimeIndicatorAttributes = AttDic()
     var currentTimeHorizontalGridlineAttributes = AttDic()
 
+    var calendar: Calendar
+
     // MARK:- Life cycle
-    init(showColumnHeader flag: Bool) {
+    init(showColumnHeader flag: Bool, calendar: Calendar) {
         self.showColumnHeader = flag
+        self.calendar = calendar
         super.init()
         initialize()
     }
@@ -109,11 +112,14 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     func initializeMinuteTick() {
-        minuteTimer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(minuteTick), userInfo: nil, repeats: true)
+        var currentDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+        currentDateComponents.second = 0
+        let startDate = calendar.date(from: currentDateComponents) ?? Date()
+        minuteTimer = Timer(fireAt: startDate, interval: TimeInterval(60), target: self, selector: #selector(configureCurrentTimeIndicator), userInfo: nil, repeats: true)
         RunLoop.current.add(minuteTimer!, forMode: .default)
     }
 
-    @objc func minuteTick() {
+    @objc func configureCurrentTimeIndicator() {
         cachedCurrentTimeComponents.removeAll()
         invalidateLayout()
     }
@@ -304,7 +310,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             let endMinuteY = CGFloat(itemEndTime.minute!) * minuteHeight
 
             if itemEndTime.day! != itemStartTime.day! {
-                endHourY = CGFloat(Calendar.current.maximumRange(of: .hour)!.count) * hourHeight + CGFloat(itemEndTime.hour!) * hourHeight
+                endHourY = CGFloat(calendar.maximumRange(of: .hour)!.count) * hourHeight + CGFloat(itemEndTime.hour!) * hourHeight
             } else {
                 endHourY = CGFloat(itemEndTime.hour!) * hourHeight
             }
@@ -465,11 +471,23 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
+    private let currentTimeDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+        return dateFormatter
+    }()
+
     func layoutAttributesForDecorationView(at indexPath: IndexPath,
                                            ofKind kind: String,
                                            withItemCache itemCache: AttDic) -> (UICollectionViewLayoutAttributes, AttDic) {
 
-        let layoutAttributes = itemCache[indexPath] ?? UICollectionViewLayoutAttributes(forDecorationViewOfKind: kind, with: indexPath)
+        let layoutAttributes = (itemCache[indexPath] as? WRCurrentTimeLayoutAttributes) ?? WRCurrentTimeLayoutAttributes(forDecorationViewOfKind: kind, with: indexPath)
+
+        if kind == DecorationViewKinds.currentTimeIndicator {
+            currentTimeDateFormatter.timeZone = calendar.timeZone
+            let dateString = currentTimeDateFormatter.string(from: Date())
+            layoutAttributes.timeLabelText = dateString
+        }
 
         if let startDate = currentPageStartDate, let interval = currentPageInterval,
             (kind == DecorationViewKinds.currentTimeGridline || kind == DecorationViewKinds.currentTimeIndicator) {
@@ -566,10 +584,11 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             overlappingEvents.forEach { $0.maxOverlapDepth = stackDepth }
         }
 
-        // Now config for all event attributes
+        // Now configure all event attributes
         events.forEach { event in
             let divisionWidth = nearbyint((sectionWidth - sectionMargin.left - sectionMargin.right) / CGFloat(event.maxOverlapDepth))
-            if divisionWidth >= 40 {
+            print("\(divisionWidth):  \(sectionWidth - sectionMargin.left - sectionMargin.right) / \(event.maxOverlapDepth)")
+            if divisionWidth >= 40 || true {
                 assert(event.maxOverlapDepth > event.offsetIndex)
                 event.attributes.size.width = divisionWidth * CGFloat(event.maxOverlapDepth - event.offsetIndex) - cellMargin.left - cellMargin.right
                 event.attributes.frame.origin.x = sectionMinX + divisionWidth * CGFloat(event.offsetIndex) + cellMargin.left
@@ -762,8 +781,8 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
 
         let day = delegate?.collectionView(collectionView!, layout: self, dayForSection: section)
         guard day != nil else { fatalError() }
-        let startOfDay = Calendar.current.startOfDay(for: day!)
-        let dayDateComponents = Calendar.current.dateComponents([.year, .month, .day], from: startOfDay)
+        let startOfDay = calendar.startOfDay(for: day!)
+        let dayDateComponents = calendar.dateComponents([.year, .month, .day], from: startOfDay)
         cachedDayDateComponents[section] = dayDateComponents
         return dayDateComponents
     }
@@ -773,7 +792,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             return cachedStartTimeDateComponents[indexPath]!
         } else {
             if let date = delegate?.collectionView(collectionView!, layout: self, startTimeForItemAtIndexPath: indexPath) {
-                return Calendar.current.dateComponents([.day, .hour, .minute], from: date)
+                return calendar.dateComponents([.day, .hour, .minute], from: date)
             } else {
                 fatalError()
             }
@@ -785,7 +804,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             return cachedEndTimeDateComponents[indexPath]!
         } else {
             if let date = delegate?.collectionView(collectionView!, layout: self, endTimeForItemAtIndexPath: indexPath) {
-                return Calendar.current.dateComponents([.day, .hour, .minute], from: date)
+                return calendar.dateComponents([.day, .hour, .minute], from: date)
             } else {
                 fatalError()
             }
@@ -809,16 +828,16 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     func dateForTimeRowHeader(at indexPath: IndexPath) -> Date {
         var components = daysForSection(indexPath.section)
         components.hour = indexPath.item
-        return Calendar.current.date(from: components)!
+        return calendar.date(from: components)!
     }
 
     func dateForColumnHeader(at indexPath: IndexPath) -> Date {
         let day = delegate?.collectionView(collectionView!, layout: self, dayForSection: indexPath.section)
-        return Calendar.current.startOfDay(for: day!)
+        return calendar.startOfDay(for: day!)
     }
 
     func hourIndexForDate(_ date: Date) -> Int {
-        return Calendar.current.component(.hour, from: date)
+        return calendar.component(.hour, from: date)
     }
 
     // MARK: - z index

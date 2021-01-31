@@ -8,21 +8,33 @@
 import UIKit
 import DateToolsSwift
 
+class WRCurrentTimeLayoutAttributes: UICollectionViewLayoutAttributes {
+    var timeLabelText: String = ""
+}
+
 class WRCurrentTimeIndicator: UICollectionReusableView {
     @IBOutlet weak var timeLbl: UILabel!
-    let dateFormatter = DateFormatter()
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        dateFormatter.dateFormat = "h:mm a"
-        
-        let timer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-        RunLoop.current.add(timer, forMode: .default)
-        
-        updateTimer()
+
+    override func apply(_ atts: UICollectionViewLayoutAttributes) {
+        super.apply(atts)
+        if let atts = atts as? WRCurrentTimeLayoutAttributes {
+            self.timeLbl.text = atts.timeLabelText
+        }
     }
-    
-    @objc func updateTimer() {
-        timeLbl.text = dateFormatter.string(from: Date())
-    }
+
+//    static var dateFormatter = DateFormatter()
+//
+//    override func awakeFromNib() {
+//        super.awakeFromNib()
+//        Self.dateFormatter.dateFormat = "h:mm a"
+//
+//        let timer = Timer(fireAt: Date() + 1.minutes, interval: TimeInterval(60), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+//        RunLoop.current.add(timer, forMode: .default)
+//
+//        updateTimer()
+//    }
+//
+//    @objc func updateTimer() {
+//        timeLbl.text = Self.dateFormatter.string(from: Date())
+//    }
 }

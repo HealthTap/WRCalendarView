@@ -63,7 +63,9 @@ class WREventCell: UICollectionViewCell {
                     contentView.alpha = 1.0
                 }
 
-
+                contentView.layer.cornerRadius = event.cornerRadius
+                contentView.layer.masksToBounds = true
+                backgroundColor = UIColor.clear
             }
         }
     }

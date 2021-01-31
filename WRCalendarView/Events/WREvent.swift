@@ -32,6 +32,7 @@ public protocol WREventType {
     var borderColor: UIColor? { get }
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
+    var cornerRadius: CGFloat { get }
 }
 
 public extension WREventType {
@@ -47,6 +48,7 @@ public extension WREventType {
     var borderColor: UIColor? { nil }
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
+    var cornerRadius: CGFloat { 4 }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")
