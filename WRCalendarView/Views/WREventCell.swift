@@ -43,7 +43,7 @@ class WREventCell: UICollectionViewCell {
                 subtitleLabel.textColor = event.subtitleColor ?? textColorHighlighted()
 
                 titleLabel.numberOfLines = event.wrapText ? 0 : 1
-                subtitleLabel.numberOfLines = event.wrapText ? 0 : 1
+                subtitleLabel.numberOfLines = 0 // event.wrapText ? 0 : 1
                 
                 if let bgColor = event.backgroundColor {
                     contentView.backgroundColor = bgColor

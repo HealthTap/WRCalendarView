@@ -587,8 +587,7 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
         // Now configure all event attributes
         events.forEach { event in
             let divisionWidth = nearbyint((sectionWidth - sectionMargin.left - sectionMargin.right) / CGFloat(event.maxOverlapDepth))
-            print("\(divisionWidth):  \(sectionWidth - sectionMargin.left - sectionMargin.right) / \(event.maxOverlapDepth)")
-            if divisionWidth >= 40 || true {
+            if divisionWidth >= 40 {
                 assert(event.maxOverlapDepth > event.offsetIndex)
                 event.attributes.size.width = divisionWidth * CGFloat(event.maxOverlapDepth - event.offsetIndex) - cellMargin.left - cellMargin.right
                 event.attributes.frame.origin.x = sectionMinX + divisionWidth * CGFloat(event.offsetIndex) + cellMargin.left
