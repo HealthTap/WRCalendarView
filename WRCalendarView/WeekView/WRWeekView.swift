@@ -230,16 +230,10 @@ public class WRWeekView: UIView {
         let hour = Int(adjustedY / flowLayout.hourHeight)
         let minute = Int((adjustedY / flowLayout.hourHeight - CGFloat(hour)) * 60)
         let numberOfDivisions = 60 / flowLayout.hourGridDivisionValue.rawValue
-        var finalMinute: Int = minute
-        var diff = Int.max
-        
-        for index in 0...numberOfDivisions {
-            if abs(flowLayout.hourGridDivisionValue.rawValue * index - minute) < diff {
-                finalMinute = flowLayout.hourGridDivisionValue.rawValue * index
-                diff = abs(flowLayout.hourGridDivisionValue.rawValue * index - minute)
-            }
-        }
-        return (hour, finalMinute)
+
+        // Round down to gridline
+        let roundedMinute = (minute / flowLayout.hourGridDivisionValue.rawValue) * flowLayout.hourGridDivisionValue.rawValue
+        return (hour, roundedMinute)
     }
     
     fileprivate func groupEventsBySection() {
