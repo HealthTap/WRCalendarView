@@ -548,7 +548,13 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
 
         // Start by sorting events from top to bottom
         let events = sectionItemAttributes
-            .sorted(by: { $0.frame.minY < $1.frame.minY })
+            .sorted(by: {
+                if  $0.frame.minY != $1.frame.minY {
+                    return $0.frame.minY < $1.frame.minY
+                } else {
+                    return $0.frame.height > $1.frame.height
+                }
+            })
             .map{ Event(attributes: $0) }
 
         guard let firstEvent = events.first else { return }
