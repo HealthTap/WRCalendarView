@@ -848,9 +848,9 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
     // MARK: - z index
     func zIndexForElementKind(_ kind: String) -> Int {
         switch kind {
-        case DecorationViewKinds.currentTimeIndicator:
-            return minOverlayZ + 10
         case DecorationViewKinds.cornerHeader:
+            return minOverlayZ + 10
+        case DecorationViewKinds.currentTimeIndicator:
             return minOverlayZ + 9
         case SupplementaryViewKinds.rowHeader:
             return minOverlayZ + 8
