@@ -62,9 +62,12 @@ public class WRWeekView: UIView {
 
     var showColumnHeader: Bool
 
-    public init(calendarType: CalendarType, showColumnHeader: Bool) {
+    private var hourGridDivision: HourGridDivision
+
+    public init(calendarType: CalendarType, showColumnHeader: Bool, hourGridDivision: HourGridDivision = HourGridDivision.minutes_30) {
         self.calendarType = calendarType
         self.showColumnHeader = showColumnHeader
+        self.hourGridDivision = hourGridDivision
         super.init(frame: .zero)
         setup()
     }
@@ -78,6 +81,7 @@ public class WRWeekView: UIView {
         dateFormatter.timeZone = calendar.timeZone
         
         flowLayout = WRWeekViewFlowLayout(showColumnHeader: self.showColumnHeader, calendar: calendar)
+        flowLayout.hourGridDivisionValue = hourGridDivision
         flowLayout.delegate = self
         
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: flowLayout)
