@@ -33,6 +33,7 @@ public protocol WREventType {
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
     var cornerRadius: CGFloat { get }
+    var priorityHint: Int { get } // Used by the flow layout as a tie-brekaer when laying out events
 }
 
 public extension WREventType {
@@ -49,6 +50,7 @@ public extension WREventType {
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
     var cornerRadius: CGFloat { 4 }
+    var priorityHint: Int { 0 }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")

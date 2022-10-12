@@ -13,6 +13,7 @@ protocol WRWeekViewFlowLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, layout: WRWeekViewFlowLayout, dayForSection section: Int) -> Date
     func collectionView(_ collectionView: UICollectionView, layout: WRWeekViewFlowLayout, startTimeForItemAtIndexPath indexPath: IndexPath) -> Date
     func collectionView(_ collectionView: UICollectionView, layout: WRWeekViewFlowLayout, endTimeForItemAtIndexPath indexPath: IndexPath) -> Date
+    func collectionView(_ collectionView: UICollectionView, layout: WRWeekViewFlowLayout, zIndexOffsetForItemAtIndexPath indexPath: IndexPath) -> Int
 }
 
 class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
@@ -323,7 +324,10 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             attributes.frame = CGRect(x: itemMinX, y: itemMinY,
                                       width: itemMaxX - itemMinX,
                                       height: itemMaxY - itemMinY)
-            attributes.zIndex = zIndexForElementKind(SupplementaryViewKinds.defaultCell)
+
+            let zIndexOffset = delegate?.collectionView(self.collectionView!, layout: self, zIndexOffsetForItemAtIndexPath: itemIndexPath) ?? 0
+
+            attributes.zIndex = zIndexForElementKind(SupplementaryViewKinds.defaultCell) + zIndexOffset
 
             sectionItemAttributes.append(attributes)
         }
@@ -551,6 +555,10 @@ class WRWeekViewFlowLayout: UICollectionViewFlowLayout {
             .sorted(by: {
                 if  $0.frame.minY != $1.frame.minY {
                     return $0.frame.minY < $1.frame.minY
+                } else if $0.zIndex != $1.zIndex {
+                    // This was added as a hack so that we can prioritize tasks over office hours. We will set the z index
+                    // below, but we use the existing z index as a tie-breaker
+                    return $0.zIndex < $1.zIndex
                 } else {
                     return $0.frame.height > $1.frame.height
                 }

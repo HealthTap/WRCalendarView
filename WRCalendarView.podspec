@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WRCalendarView'
-  s.version          = '2.6.4'
+  s.version          = '2.6.5'
   s.summary          = 'Calendar Day and Week View for iOS'
   s.description      = 'Calendar Day and Week View for iOS'
   s.homepage         = 'https://github.com/wayfinders/WRCalendarView'
