@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "datetools",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HealthTap/DateTools",
+      "state" : {
+        "revision" : "d70d0cc06d3c75fbe554d2a524c08ef314369ae5",
+        "version" : "5.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}

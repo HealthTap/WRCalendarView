@@ -18,7 +18,6 @@ class WRColumnHeader: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-//        dateFormatter.locale = Locale(identifier: "en_US")
     }
     
     var calendarType: CalendarType = .week
