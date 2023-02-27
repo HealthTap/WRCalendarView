@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -14,7 +14,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WREventCell" id="gTV-IL-0wX" customClass="WREventCell" customModule="WRCalendarView" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WREventCell" id="gTV-IL-0wX" customClass="WREventCell" customModule="WRCalendarView">
             <rect key="frame" x="0.0" y="0.0" width="183" height="168"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -22,13 +22,13 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
-                        <rect key="frame" x="4" y="4" width="175" height="14"/>
+                        <rect key="frame" x="4" y="4" width="175" height="12"/>
                         <fontDescription key="fontDescription" name="NotoSans" family="Noto Sans" pointSize="10"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FvK-VC-I1R">
-                        <rect key="frame" x="4" y="18" width="175" height="14"/>
+                        <rect key="frame" x="4" y="16" width="175" height="12"/>
                         <fontDescription key="fontDescription" name="NotoSans" family="Noto Sans" pointSize="10"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -46,8 +46,8 @@
             </constraints>
             <size key="customSize" width="183" height="168"/>
             <connections>
-                <outlet property="subtitleLabel" destination="FvK-VC-I1R" id="8Fo-c9-oIm"/>
-                <outlet property="titleLabel" destination="SvP-El-S0W" id="oEn-93-BpK"/>
+                <outlet property="subtitleLabel" destination="FvK-VC-I1R" id="f8u-iR-sOJ"/>
+                <outlet property="titleLabel" destination="SvP-El-S0W" id="lON-iN-w3w"/>
             </connections>
             <point key="canvasLocation" x="-32.799999999999997" y="112.44377811094454"/>
         </collectionViewCell>
