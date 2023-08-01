@@ -26,7 +26,7 @@ public class WRWeekView: UIView {
     var initialContentOffset = CGPoint.zero
     var currentPage: Int!
     var loading = false
-    var isFirst = true
+    var shouldScrollToCurrentTime = true
     var daysToShow: Int = 0
     var events = [WREventType]()
     var eventBySection = [String: [WREventType]]()
@@ -207,6 +207,8 @@ public class WRWeekView: UIView {
     public func handleOrientationChange() {
         flowLayout.invalidateLayoutCache()
         flowLayout.invalidateLayout()
+        // Must scroll to current time if orientation change
+        shouldScrollToCurrentTime = true
         updateView()
     }
 
@@ -262,9 +264,9 @@ public class WRWeekView: UIView {
             self.setCurrentPage(self.currentPage, animated: animated)
             
             // 처음 화면이 보여지거나 schedule type이 바뀔때만 현재 시간 보여줌
-            if self.isFirst {
+            if self.shouldScrollToCurrentTime {
                 self.flowLayout.scrollCollectionViewToTime(self.calendarDate)
-                self.isFirst = false
+                self.shouldScrollToCurrentTime = false
             }
         }
     }
