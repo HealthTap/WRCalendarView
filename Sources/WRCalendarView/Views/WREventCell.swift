@@ -12,7 +12,7 @@ class WREventCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var titleLabelLeadingConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -50,11 +50,11 @@ class WREventCell: UICollectionViewCell {
                 if let image = event.image {
                     imageView.image = image
                     imageView.isHidden = false
-                    imageViewWidthConstraint.constant = 16
+                    titleLabelLeadingConstraint.constant = 24
                 } else {
                     imageView.image = nil
                     imageView.isHidden = true
-                    imageViewWidthConstraint.constant = 0
+                    titleLabelLeadingConstraint.constant = 4
                 }
                 if let bgColor = event.backgroundColor {
                     contentView.backgroundColor = bgColor

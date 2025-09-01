@@ -21,7 +21,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="183" height="168"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-El-S0W">
                         <rect key="frame" x="24" y="4" width="155" height="12"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="12" id="hLL-bZ-XrT"/>
@@ -30,7 +30,7 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FvK-VC-I1R">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FvK-VC-I1R">
                         <rect key="frame" x="24" y="16" width="155" height="12"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="12" id="K0P-KP-eWr"/>
@@ -51,20 +51,20 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="FvK-VC-I1R" secondAttribute="trailing" constant="4" id="Cq1-dw-zcb"/>
-                <constraint firstItem="SvP-El-S0W" firstAttribute="leading" secondItem="Z8B-cC-1Zj" secondAttribute="trailing" constant="4" id="Ja7-Bz-xR6"/>
                 <constraint firstItem="Z8B-cC-1Zj" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="ZBH-VG-2jI"/>
+                <constraint firstItem="FvK-VC-I1R" firstAttribute="leading" secondItem="SvP-El-S0W" secondAttribute="leading" id="kxe-sU-sqD"/>
                 <constraint firstAttribute="trailing" secondItem="SvP-El-S0W" secondAttribute="trailing" constant="4" id="omj-n3-ZrK"/>
                 <constraint firstItem="Z8B-cC-1Zj" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="4" id="uE0-q3-deZ"/>
+                <constraint firstItem="SvP-El-S0W" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="ul8-58-doN"/>
                 <constraint firstItem="FvK-VC-I1R" firstAttribute="top" secondItem="SvP-El-S0W" secondAttribute="bottom" id="vAc-Ox-muT"/>
                 <constraint firstItem="SvP-El-S0W" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="4" id="vPt-2W-Vj2"/>
-                <constraint firstItem="FvK-VC-I1R" firstAttribute="leading" secondItem="Z8B-cC-1Zj" secondAttribute="trailing" constant="4" id="yDe-s4-9jA"/>
             </constraints>
             <size key="customSize" width="183" height="168"/>
             <connections>
                 <outlet property="imageView" destination="Z8B-cC-1Zj" id="JOL-ge-MWk"/>
-                <outlet property="imageViewWidthConstraint" destination="EoZ-eF-KHD" id="Yu2-Ja-qop"/>
                 <outlet property="subtitleLabel" destination="FvK-VC-I1R" id="f8u-iR-sOJ"/>
                 <outlet property="titleLabel" destination="SvP-El-S0W" id="lON-iN-w3w"/>
+                <outlet property="titleLabelLeadingConstraint" destination="ul8-58-doN" id="l1g-G2-oPY"/>
             </connections>
             <point key="canvasLocation" x="-32.799999999999997" y="112.44377811094454"/>
         </collectionViewCell>
