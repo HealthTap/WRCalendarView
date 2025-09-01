@@ -11,6 +11,8 @@ import UIKit
 class WREventCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,7 +46,16 @@ class WREventCell: UICollectionViewCell {
 
                 titleLabel.numberOfLines = event.wrapText ? 0 : 1
                 subtitleLabel.numberOfLines = 0 // event.wrapText ? 0 : 1
-                
+
+                if let image = event.image {
+                    imageView.image = image
+                    imageView.isHidden = false
+                    imageViewWidthConstraint.constant = 16
+                } else {
+                    imageView.image = nil
+                    imageView.isHidden = true
+                    imageViewWidthConstraint.constant = 0
+                }
                 if let bgColor = event.backgroundColor {
                     contentView.backgroundColor = bgColor
                 } else {

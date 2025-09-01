@@ -24,6 +24,7 @@ public protocol WREventType {
     var title: String { get }
     var titleColor: UIColor? { get }
     var subtitle: String? { get }
+    var image: UIImage? { get }
     var subtitleColor: UIColor? { get }
 
     // Other appearance properties
@@ -65,6 +66,7 @@ open class WREvent: TimePeriod, WREventType {
     open var isCancelled: Bool = false // Unused
     open var wrapText: Bool { true }  // For backwards compatibility
     open var subtitle: String?
+    open var image: UIImage?
     open var subtitleColor: UIColor?
 
     open var id: String { eventId }
