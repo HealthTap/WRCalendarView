@@ -51,6 +51,7 @@ public extension WREventType {
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
     var cornerRadius: CGFloat { 4 }
+    var isBackground: Bool { false }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")
