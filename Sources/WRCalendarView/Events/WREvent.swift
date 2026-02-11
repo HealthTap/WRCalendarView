@@ -34,6 +34,7 @@ public protocol WREventType {
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
     var cornerRadius: CGFloat { get }
+    var isBackground: Bool { get }
 }
 
 public extension WREventType {
