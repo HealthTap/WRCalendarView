@@ -15,11 +15,26 @@ public protocol WRWeekViewDelegate: NSObjectProtocol  {
     func selectEvent(_ event: WREventType)
 }
 
+public class OverlappingCollectionView: UICollectionView {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let sortedCells = visibleCells.sorted {
+            $0.layer.zPosition > $1.layer.zPosition
+        }
+        for cell in sortedCells {
+            let convertedPoint = cell.convert(point, from: self)
+            if cell.bounds.contains(convertedPoint) {
+                return cell.hitTest(convertedPoint, with: event)
+            }
+        }
+        return super.hitTest(point, with: event)
+    }
+}
+
 public class WRWeekView: UIView {
     let pageCount = 7
     let dateFormatter = DateFormatter()
     
-    public var collectionView: UICollectionView!
+    public var collectionView: OverlappingCollectionView!
     var flowLayout: WRWeekViewFlowLayout!
     var initDate: Date!
     var startDate: Date!
@@ -84,7 +99,7 @@ public class WRWeekView: UIView {
         flowLayout.hourGridDivisionValue = hourGridDivision
         flowLayout.delegate = self
         
-        collectionView = UICollectionView(frame: bounds, collectionViewLayout: flowLayout)
+        collectionView = OverlappingCollectionView(frame: bounds, collectionViewLayout: flowLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isDirectionalLockEnabled = true
