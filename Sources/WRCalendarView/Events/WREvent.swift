@@ -34,6 +34,7 @@ public protocol WREventType {
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
     var cornerRadius: CGFloat { get }
+    var isBackground: Bool { get }
 }
 
 public extension WREventType {
@@ -50,6 +51,7 @@ public extension WREventType {
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
     var cornerRadius: CGFloat { 4 }
+    var isBackground: Bool { false }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")
