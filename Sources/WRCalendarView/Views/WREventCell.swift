@@ -77,7 +77,16 @@ class WREventCell: UICollectionViewCell {
                 contentView.layer.cornerRadius = event.cornerRadius
                 contentView.layer.masksToBounds = true
                 backgroundColor = UIColor.clear
-                layer.zPosition = event.isBackground ? 0.0 : 1.0
+                layer.zPosition = {
+                    switch event.zPosition {
+                    case .normal:
+                        return 0
+                    case .foreground:
+                        return 1
+                    case .background:
+                        return -1
+                    }
+                }()
             }
         }
     }

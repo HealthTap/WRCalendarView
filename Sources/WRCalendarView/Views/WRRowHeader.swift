@@ -17,6 +17,7 @@ class WRRowHeader: UICollectionReusableView {
     override func awakeFromNib() {
         super.awakeFromNib()
         dateFormatter.dateFormat = "h:mm a"
+        layer.zPosition = 2
     }
 
     var date: Date? {

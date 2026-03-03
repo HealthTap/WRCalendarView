@@ -11,6 +11,10 @@ import DateToolsSwift
 
 // GP: I convered `WREvent` to a protocol `WREventType` in Jan 2021, but left the original class for backwards compatibility.
 
+public enum EventZPosition {
+    case background, normal, foreground
+}
+
 public protocol WREventType {
     var id: String { get }
     var startDate: Date { get }
@@ -34,7 +38,7 @@ public protocol WREventType {
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
     var cornerRadius: CGFloat { get }
-    var isBackground: Bool { get }
+    var zPosition: EventZPosition { get }
 }
 
 public extension WREventType {
@@ -51,7 +55,7 @@ public extension WREventType {
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
     var cornerRadius: CGFloat { 4 }
-    var isBackground: Bool { false }
+    var zPosition: EventZPosition { .normal }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")
