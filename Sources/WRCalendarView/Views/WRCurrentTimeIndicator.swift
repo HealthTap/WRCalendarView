@@ -15,6 +15,11 @@ class WRCurrentTimeLayoutAttributes: UICollectionViewLayoutAttributes {
 class WRCurrentTimeIndicator: UICollectionReusableView {
     @IBOutlet weak var timeLbl: UILabel!
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        layer.zPosition = 2
+    }
+
     override func apply(_ atts: UICollectionViewLayoutAttributes) {
         super.apply(atts)
         if let atts = atts as? WRCurrentTimeLayoutAttributes {

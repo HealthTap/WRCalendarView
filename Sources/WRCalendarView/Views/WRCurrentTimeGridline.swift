@@ -11,6 +11,7 @@ class WRCurrentTimeGridline: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(hexString: "fd3935")
+        layer.zPosition = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
