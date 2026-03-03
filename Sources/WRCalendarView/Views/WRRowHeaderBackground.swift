@@ -11,6 +11,7 @@ class WRRowHeaderBackground: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.white
+        layer.zPosition = 2
 //        let gridThickness: CGFloat = UIScreen.main.scale == 2 ? 0.5 : 1.0
 //        addBorder(edge: .right, color: ColorUtil.uiColorFromHex("dadada"), borderWidth: gridThickness)
     }
