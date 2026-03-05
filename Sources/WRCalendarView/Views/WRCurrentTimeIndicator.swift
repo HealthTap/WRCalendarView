@@ -17,7 +17,7 @@ class WRCurrentTimeIndicator: UICollectionReusableView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        layer.zPosition = CGFloat(VisibilityPriority.high.rawValue)
+        layer.zPosition = CGFloat(VisibilityPriority.critical.rawValue)
     }
 
     override func apply(_ atts: UICollectionViewLayoutAttributes) {
