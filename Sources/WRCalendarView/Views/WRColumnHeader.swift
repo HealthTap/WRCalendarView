@@ -18,6 +18,7 @@ class WRColumnHeader: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        layer.zPosition = CGFloat(VisibilityPriority.critical.rawValue)
     }
     
     var calendarType: CalendarType = .week
