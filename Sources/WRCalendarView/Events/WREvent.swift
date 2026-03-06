@@ -11,8 +11,8 @@ import DateToolsSwift
 
 // GP: I convered `WREvent` to a protocol `WREventType` in Jan 2021, but left the original class for backwards compatibility.
 
-public enum EventZPosition {
-    case background, normal, foreground
+public enum VisibilityPriority: Int {
+    case none = 0, low, medium, high, critical
 }
 
 public protocol WREventType {
@@ -38,7 +38,7 @@ public protocol WREventType {
     var opacity: CGFloat? { get }
     var canDrag: Bool { get }
     var cornerRadius: CGFloat { get }
-    var zPosition: EventZPosition { get }
+    var zPosition: VisibilityPriority { get }
 }
 
 public extension WREventType {
@@ -55,7 +55,7 @@ public extension WREventType {
     var opacity: CGFloat? { nil }
     var canDrag: Bool { false }
     var cornerRadius: CGFloat { 4 }
-    var zPosition: EventZPosition { .normal }
+    var zPosition: VisibilityPriority { .none }
 }
 
 @available(*, deprecated, message: "WREvent has been deprecated in favour of WREventType.")

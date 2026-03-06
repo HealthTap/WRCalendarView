@@ -12,6 +12,7 @@ class WRCornerHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.white
+        layer.zPosition = CGFloat(VisibilityPriority.critical.rawValue)
 //        let gridThickness: CGFloat = UIScreen.main.scale == 2 ? 0.5 : 1.0
 //        addBorder(edge: .bottom, color: ColorUtil.uiColorFromHex("dadada"), borderWidth: gridThickness)
     }
